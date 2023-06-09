@@ -2,27 +2,20 @@
 
 UDPworker::UDPworker(QObject *parent) : QObject(parent)
 {
-
-
-
 }
-
 
 /*!
  * @brief Метод инициализирует UDP сервер
  */
 void UDPworker::InitSocket()
 {
-
     serviceUdpSocket = new QUdpSocket(this);
     /*
      * Соединяем присваиваем адрес и порт серверу и соединяем функцию
      * обраотчик принятых пакетов с сокетом
      */
     serviceUdpSocket->bind(QHostAddress::LocalHost, BIND_PORT);
-
     connect(serviceUdpSocket, &QUdpSocket::readyRead, this, &UDPworker::readPendingDatagrams);
-
 }
 
 /*!
@@ -30,7 +23,6 @@ void UDPworker::InitSocket()
  */
 void UDPworker::ReadDatagram(QNetworkDatagram datagram)
 {
-
     QByteArray data;
     data = datagram.data();
 
@@ -46,9 +38,7 @@ void UDPworker::ReadDatagram(QNetworkDatagram datagram)
  */
 void UDPworker::SendDatagram(QByteArray data)
 {
-    /*
-     *  Отправляем данные на localhost и задефайненный порт
-     */
+    // Отправляем данные на localhost и задефайненный порт
     serviceUdpSocket->writeDatagram(data, QHostAddress::LocalHost, BIND_PORT);
 }
 
@@ -57,12 +47,10 @@ void UDPworker::SendDatagram(QByteArray data)
  */
 void UDPworker::readPendingDatagrams( void )
 {
-    /*
-     *  Производим чтение принятых датаграмм
-     */
-    while(serviceUdpSocket->hasPendingDatagrams()){
-            QNetworkDatagram datagram = serviceUdpSocket->receiveDatagram();
-            ReadDatagram(datagram);
+    // Производим чтение принятых датаграмм
+    while(serviceUdpSocket->hasPendingDatagrams())
+    {
+        QNetworkDatagram datagram = serviceUdpSocket->receiveDatagram();
+        ReadDatagram(datagram);
     }
-
 }
