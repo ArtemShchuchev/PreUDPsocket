@@ -6,7 +6,15 @@
 #include <QDateTime>
 
 
-#define BIND_PORT 12345
+#define BIND_PORT   12345
+#define MES_PORT    12346
+
+struct MESSAGE
+{
+    QString mes;
+    QString size;
+    QString adr;
+};
 
 class UDPworker : public QObject
 {
@@ -14,18 +22,21 @@ class UDPworker : public QObject
 
 public:
     explicit UDPworker(QObject *parent = nullptr);
-    void InitSocket( void );
-    void ReadDatagram( QNetworkDatagram datagram);
-    void SendDatagram(QByteArray data );
+    void InitSocket();
+    void ReadDatagram(const QNetworkDatagram& datagram);
+    void SendDatagram(const QByteArray& data, const int port = BIND_PORT);
 
 private slots:
-    void readPendingDatagrams(void);
+    void readPendingDatagrams();
+    void readMesDatagrams();
 
 private:
     QUdpSocket* serviceUdpSocket;
+    QUdpSocket* mesUdpSocket;
 
 signals:
-    void sig_sendTimeToGUI(QDateTime data);
+    void sig_sendTimeToGUI(const QDateTime data);
+    void sig_sendMesToGUI(const MESSAGE message);
 };
 
 #endif // UDPWORKER_H
