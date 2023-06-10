@@ -78,10 +78,8 @@ void MainWindow::counter()
 void MainWindow::DisplayMes(const MESSAGE message)
 {
     counter();
-    ui->te_result->append("Принято сообщение: " + message.mes +
-                          ". От отправителя: " + message.adr +
-                          ", размер сообщения " + QString::number(message.size) +
-                          "(байт)");
+    ui->te_result->append(QString("Принято сообщение: %1. От отправителя: %2, размер сообщения: %3(байт)")
+                          .arg(message.mes, message.adr, QString::number(message.size)));
 }
 
 // Кнопка: Остановить передачу
