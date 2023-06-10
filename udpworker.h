@@ -29,7 +29,6 @@ public:
 
 private slots:
     void readPendingDatagrams();
-    void readMesDatagrams();
 
 private:
     QUdpSocket* serviceUdpSocket;

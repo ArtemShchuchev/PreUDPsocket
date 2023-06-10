@@ -18,7 +18,7 @@ void UDPworker::InitSocket()
     serviceUdpSocket->  bind(QHostAddress::LocalHost, BIND_PORT);
     mesUdpSocket->      bind(QHostAddress::LocalHost, MES_PORT);
     connect(serviceUdpSocket, &QUdpSocket::readyRead, this, &UDPworker::readPendingDatagrams);
-    connect(mesUdpSocket, &QUdpSocket::readyRead, this, &UDPworker::readMesDatagrams);
+    connect(mesUdpSocket, &QUdpSocket::readyRead, this, &UDPworker::readPendingDatagrams);
 }
 
 /*!
@@ -54,6 +54,7 @@ void UDPworker::ReadDatagram(const QNetworkDatagram &datagram)
         break;
     }
 }
+
 /*!
  * @brief Метод осуществляет опередачу датаграммы
  */
@@ -81,19 +82,18 @@ void UDPworker::SendDatagram(const QByteArray &data, const int port)
 void UDPworker::readPendingDatagrams()
 {
     // Производим чтение принятых датаграмм
-    while(serviceUdpSocket->hasPendingDatagrams())
-    {
-        QNetworkDatagram datagram = serviceUdpSocket->receiveDatagram();
-        ReadDatagram(datagram);
-    }
-}
+    QNetworkDatagram datagram;
 
-void UDPworker::readMesDatagrams()
-{
-    // Производим чтение принятых датаграмм
-    while(mesUdpSocket->hasPendingDatagrams())
+    while(serviceUdpSocket->hasPendingDatagrams() || mesUdpSocket->hasPendingDatagrams())
     {
-        QNetworkDatagram datagram = mesUdpSocket->receiveDatagram();
+        if (QObject::sender() == serviceUdpSocket)
+        {
+            datagram = serviceUdpSocket->receiveDatagram();
+        }
+        else if (QObject::sender() ==  mesUdpSocket)
+        {
+            datagram = mesUdpSocket->receiveDatagram();
+        }
         ReadDatagram(datagram);
     }
 }
