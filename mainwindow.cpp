@@ -80,7 +80,7 @@ void MainWindow::DisplayMes(const MESSAGE message)
     counter();
     ui->te_result->append("Принято сообщение: " + message.mes +
                           ". От отправителя: " + message.adr +
-                          ", размер сообщения " + message.size +
+                          ", размер сообщения " + QString::number(message.size) +
                           "(байт)");
 }
 

@@ -44,7 +44,7 @@ void UDPworker::ReadDatagram(const QNetworkDatagram &datagram)
         // Принято сообщение от адрес отправителя, размер сообщения(байт)
         MESSAGE message;
         inStr >> message.mes;
-        message.size = QString::number(message.mes.size());
+        message.size = message.mes.size();
         message.adr = datagram.senderAddress().toString();
         emit sig_sendMesToGUI(message);
         break;

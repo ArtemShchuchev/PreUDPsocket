@@ -13,7 +13,7 @@
 struct MESSAGE
 {
     QString mes;
-    QString size;
+    int size;
     QString adr;
 };
 
